@@ -1,0 +1,144 @@
+
+/* Navbar */
+.navbar {
+  background-color: #DCEAE4;
+  border: 1px solid #04555A;
+  padding: 10px 0;
+  margin: 2% 4% 2% 4%;
+  border-radius: 50px;
+}
+
+/* Logo */
+.navbar-brand img {
+  width: 250px;
+  border-radius: 20px;
+  display: block;
+}
+
+/* Navigation links */
+.petcart-links {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Navigation links */
+.petcart-links a {
+  display: block;
+  padding: 8px 12px;
+  border-radius: 6px;
+  color: #04555A;
+  font-size: 16px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Hover effect for all links */
+.petcart-links a:hover {
+  background-color: #069684;
+  color: #FFFFFF;
+}
+
+
+/* Search bar */
+.search-bar {
+  display: flex;
+  align-items: center;
+  width: 400px;
+  border: 1px solid #04555A;
+  border-radius: 30px;
+  overflow: hidden;
+  background-color: #FFFFFF;
+}
+
+.search-bar input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  background-color: #FFFFFF;
+  color: #04555A;
+  font-size: 14px;
+  padding: 10px 12px;
+}
+
+.search-bar input::placeholder {
+  color: #888888;
+}
+
+/* Search button */
+.search-bar button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background-color: #0AAA91;
+  color: #FFFFFF;
+  font-size: 17px;
+  padding: 10px 16px;
+  cursor: pointer;
+}
+
+.search-bar button:hover {
+  background-color: #04555A;
+}
+
+/* Profile and cart icons */
+.icon-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #04555A;
+  font-size: 32px;
+  line-height: 1;
+  text-decoration: none;
+  height: 44px;
+  width: 44px;
+  flex-shrink: 0;
+  border-radius: 6px;
+}
+/* Hover effect for all links */
+
+.icon-link:hover {
+  background-color: #069684;
+  color: #FFFFFF;
+  /* color: #04555A; */
+}
+
+/* Keep icons centered in their container */
+.navbar .d-flex.gap-3 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+/* Responsive layout */
+@media (max-width: 992px) {
+  .navbar {
+    border-radius: 25px;
+  }
+
+  .navbar .container {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .navbar-brand img {
+    width: 180px;
+  }
+
+  .search-bar {
+    width: 100%;
+    margin: 12px 0;
+  }
+
+  .petcart-links {
+    flex-wrap: wrap;
+  }
+}
