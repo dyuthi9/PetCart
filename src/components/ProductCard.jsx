@@ -1,15 +1,30 @@
+
+import { useState } from "react";
+import { useCart } from "../context/CartContext";
 import "./ProductCard.css";
 
 function ProductCard({ product, onAddToCart }) {
+    const { addToCart } = useCart();
+  const [added, setAdded] = useState(false);
+
+  const handleAddToCart = () => {
+    addToCart(product);
+    setAdded(true);
+    setTimeout(() => setAdded(false), 1200);
+  };
+
   return (
     <div className="product-card">
       <div className="product-image-container">
-        <img
-          src={product.image}
-          alt={product.name}
-          className="product-image"
-        />
-      </div>
+  <img
+    src={product.image || "/default-product.png"}
+    alt={product.name}
+    className="product-image"
+    onError={(e) => {
+      e.currentTarget.src = "./src/assets/logo.png";
+    }}
+  />
+</div>
 
       <div className="product-details">
         <h6 className="product-name">{product.name}</h6>
@@ -27,12 +42,9 @@ function ProductCard({ product, onAddToCart }) {
           ₹{product.price.toLocaleString("en-IN")}
         </div>
 
-        <button
-          className="add-cart-btn"
-          onClick={() => onAddToCart(product)}
-        >
-          <span>🛒</span> Add to Cart
-        </button>
+        <button className="add-cart-btn" onClick={handleAddToCart}>
+      <span>🛒</span> {added ? "Added ✓" : "Add to Cart"}
+    </button>
       </div>
     </div>
   );
