@@ -1,6 +1,6 @@
 
 import { Link, useNavigate } from "react-router-dom";
-import logo from "../assets/Petcart.png";
+import logo from "../assets/petcart.png";
 // import { useCart } from "../context/CartContext";
 import "./Navbar.css";
 import { useState } from "react";
