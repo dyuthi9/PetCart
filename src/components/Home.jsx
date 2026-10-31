@@ -136,7 +136,7 @@ function Home({ onAddToCart }) {
         <div className="product-slider">
           {!loading &&
             !error &&
-            products.slice(0, 8).map((product) => (
+            products.slice(0, 10).map((product) => (
               <div
                 className="product-slide"
                 key={product._id || product.id}

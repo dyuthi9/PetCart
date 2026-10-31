@@ -118,6 +118,39 @@ function Login() {
     }
   };
 
+const handleDeleteOrder = async (orderId) => {
+    const confirmDelete = window.confirm(
+        "Are you sure you want to delete this order?"
+    );
+
+    if (!confirmDelete) return;
+
+    try {
+        const response = await fetch(`${API}/orders/${orderId}`, {
+            method: "DELETE",
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.message || "Unable to delete order");
+        }
+
+        setOrders((previousOrders) =>
+            previousOrders.filter((order) => order._id !== orderId)
+        );
+
+        alert("Order deleted successfully!");
+
+    } catch (error) {
+        console.error("Delete order error:", error);
+        alert(error.message || "Unable to delete order.");
+    }
+};
+
   const handleLogout = () => {
     logout();
     setOrders([]);
@@ -209,47 +242,98 @@ function Login() {
             )}
           </div>
 
-          <div className="account-section">
-            <h2>Previous orders</h2>
+         
+<div className="account-section">
 
-            {ordersLoading ? (
-              <p>Loading your orders...</p>
-            ) : orders.length > 0 ? (
-              orders.map((order) => (
-                <article className="order-card" key={order._id}>
-                  <div className="order-header">
+    <h2>Previous Orders</h2>
+
+    {ordersLoading ? (
+        <p>Loading your orders...</p>
+    ) : orders.length > 0 ? (
+
+        orders.map((order) => (
+
+            <article className="order-card" key={order._id}>
+
+                <div className="order-header">
                     <strong>
-                      Order #{order._id.slice(-6).toUpperCase()}
+                        Order #{order._id.slice(-6).toUpperCase()}
                     </strong>
-                    <span className="order-status">
-                      {order.status}
-                    </span>
-                  </div>
 
-                  <p className="order-date">
+                    <button
+                        className="delete-order-btn"
+                        onClick={() => handleDeleteOrder(order._id)}
+                    >
+                        Delete Order
+                    </button>
+                </div>
+
+                <p className="order-date">
+                    Order Date:{" "}
                     {new Date(order.createdAt).toLocaleDateString("en-IN")}
-                  </p>
+                </p>
 
-                  <ul className="account-list">
-                    {order.items.map((item, index) => (
-                      <li key={item._id || index}>
-                        <span>{item.name} × {item.quantity}</span>
-                        <strong>
-                          ₹{formatPrice(item.price * item.quantity)}
-                        </strong>
-                      </li>
+                <div className="order-details">
+
+                    <h4>Order Details</h4>
+
+                    {order.items?.map((item, index) => (
+
+                        <div className="order-product" key={item._id || index}>
+
+                            <span>
+                                {item.name} × {item.quantity}
+                            </span>
+
+                            <strong>
+                                ₹{formatPrice(item.price * item.quantity)}
+                            </strong>
+
+                        </div>
+
                     ))}
-                  </ul>
 
-                  <p className="account-total">
-                    Order total: ₹{formatPrice(order.total)}
-                  </p>
-                </article>
-              ))
-            ) : (
-              <p>You haven't placed any orders yet.</p>
-            )}
-          </div>
+                    <hr />
+
+                    <h4>Delivery Address</h4>
+
+                    {order.address ? (
+                        <>
+                            <p>{order.address.fullName}</p>
+                            <p>{order.address.phone}</p>
+                            <p>{order.address.street}</p>
+                            <p>
+                                {order.address.city},{" "}
+                                {order.address.state} - {order.address.pincode}
+                            </p>
+                        </>
+                    ) : (
+                        <p>Address details not available.</p>
+                    )}
+
+                    <h4>Payment Details</h4>
+
+                    <p>
+                        Payment Method:{" "}
+                        {order.paymentMethod || "Not available"}
+                    </p>
+
+                    <div className="order-total">
+                        Order Total: ₹{formatPrice(order.total)}
+                    </div>
+
+                </div>
+
+            </article>
+
+        ))
+
+    ) : (
+        <p>You haven't placed any orders yet.</p>
+    )}
+
+</div>
+
 
           <Link to="/" className="account-home-link">
             ← Continue shopping

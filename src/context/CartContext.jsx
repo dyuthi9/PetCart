@@ -31,8 +31,9 @@ export function CartProvider({ children }) {
         return;
       }
       const data = await res.json();
-      setItems((data.items || []).filter((i) => i.product));
-    } catch (err) {
+if (Array.isArray(data.items)) {
+    setItems(data.items.filter((i) => i.product));
+}    } catch (err) {
       console.error("Failed to load cart:", err);
     } finally {
       setLoading(false);
@@ -93,11 +94,20 @@ export function CartProvider({ children }) {
   const clearCart = () => request("/cart", "DELETE");
 
   // Creates an order from the server-side cart; the server empties the cart
-  const placeOrder = async () => {
-    const result = await request("/orders", "POST");
-    if (result.ok) setItems([]);
+ const placeOrder = async (orderData) => {
+
+    const result = await request(
+        "/orders",
+        "POST",
+        orderData
+    );
+
+    if (result.ok) {
+        setItems([]);
+    }
+
     return result;
-  };
+};
 
   const cartCount = items.reduce((sum, i) => sum + i.quantity, 0);
   const cartTotal = items.reduce(

@@ -7,15 +7,15 @@ import { useState } from "react";
 
 function Navbar() {
     const [searchTerm, setSearchTerm] = useState("");
-const navigate = useNavigate();
+    const navigate = useNavigate();
 
-const handleSearch = (e) => {
-    e.preventDefault();
+    const handleSearch = (e) => {
+        e.preventDefault();
 
-    if (searchTerm.trim() !== "") {
-        navigate(`/shop?search=${encodeURIComponent(searchTerm)}`);
-    }
-};
+        if (searchTerm.trim() !== "") {
+            navigate(`/shop?search=${encodeURIComponent(searchTerm)}`);
+        }
+    };
 
     return (
         <nav className="navbar navbar-expand-lg bg-white">
@@ -28,27 +28,65 @@ const handleSearch = (e) => {
 
                 {/* Navigation Links */}
                 <div className="petcart-links d-flex align-items-center gap-4">
-                    <Link className="nav-link" to="/#home">Home</Link>
-                    <Link className="nav-link" to="/#shop">Shop</Link>
-                    <Link className="nav-link" to="/#categories">Categories</Link>
-                    <Link className="nav-link" to="/#about">About</Link>
-                    <Link className="nav-link" to="/#contact">Contact</Link>
+                    <button className="nav-link"
+                        onClick={() => {
+                            document.getElementById("home")?.scrollIntoView({
+                                behavior: "smooth",
+                            });
+                        }}
+                    >                    <Link className="nav-link" to="/#home">Home </Link>
+                    </button>
+                    <button className="nav-link"
+                        onClick={() => {
+                            document.getElementById("shop")?.scrollIntoView({
+                                behavior: "smooth",
+                            });
+                        }}
+                    >                    <Link className="nav-link" to="/#shop">Shop </Link>
+                    </button>
+                    <button className="nav-link"
+                        onClick={() => {
+                            document.getElementById("categories")?.scrollIntoView({
+                                behavior: "smooth",
+                            });
+                        }}
+                    >
+                        <Link className="nav-link" to="/#categories">Categories</Link>
+                    </button>
+                    <button className="nav-link"
+                        onClick={() => {
+                            document.getElementById("about")?.scrollIntoView({
+                                behavior: "smooth",
+                            });
+                        }}
+                    >
+                        <Link className="nav-link" to="/#about">About</Link>
+                    </button>
+                    <button className="nav-link"
+                        onClick={() => {
+                            document.getElementById("contact")?.scrollIntoView({
+                                behavior: "smooth",
+                            });
+                        }}
+                    >
+                        <Link className="nav-link" to="/#contact">Contact</Link>
+                    </button>
                 </div>
 
                 {/* Search Bar */}
-<form className="search-bar d-flex" onSubmit={handleSearch}>
-    <input
-        type="search"
-        placeholder="Search for pet food, toys..."
-        className="form-control"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-    />
+                <form className="search-bar d-flex" onSubmit={handleSearch}>
+                    <input
+                        type="search"
+                        placeholder="Search for pet food, toys..."
+                        className="form-control"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
 
-    <button type="submit" aria-label="Search">
-        <i className="bi bi-search"></i>
-    </button>
-</form>
+                    <button type="submit" aria-label="Search">
+                        <i className="bi bi-search"></i>
+                    </button>
+                </form>
 
                 {/* Profile and Cart Icons */}
                 <div className="d-flex gap-4 align-items-center">
