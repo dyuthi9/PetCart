@@ -1,39 +1,25 @@
-
 import { useState } from "react";
 import { useCart } from "../context/CartContext";
-import { useAuth } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
 import "./ProductCard.css";
 
 function ProductCard({ product }) {
-
     const { addToCart } = useCart();
-    const { user, token } = useAuth();
-    const navigate = useNavigate();
 
     const [added, setAdded] = useState(false);
     const [message, setMessage] = useState("");
     const [adding, setAdding] = useState(false);
 
     const handleAddToCart = async () => {
-
-        // Check authentication using AuthContext
-        if (!token || !user) {
-            setMessage("Please login first to add products!");
-
-            setTimeout(() => {
-                navigate("/login");
-            }, 1000);
-
-            return;
-        }
-
         try {
             setAdding(true);
             setMessage("");
 
-            // Add product to cart
-            await addToCart(product);
+            const result = await addToCart(product);
+
+            if (!result.ok) {
+                setMessage(result.message || "Unable to add product.");
+                return;
+            }
 
             setAdded(true);
             setMessage("Product added successfully!");
@@ -67,17 +53,12 @@ function ProductCard({ product }) {
 
             <div className="product-details">
 
-                <h6 className="product-name">
-                    {product.name}
-                </h6>
+                <h6 className="product-name">{product.name}</h6>
 
-                <p className="product-weight">
-                    {product.weight}
-                </p>
+                <p className="product-weight">{product.weight}</p>
 
                 <div className="product-rating">
                     <span className="stars">★★★★☆</span>
-
                     <span className="rating-count">
                         {product.rating} ({product.reviews})
                     </span>
@@ -93,19 +74,17 @@ function ProductCard({ product }) {
                     disabled={adding}
                 >
                     <span>🛒</span>
-
-                    {adding
-                        ? "Adding..."
-                        : added
-                        ? "Added ✓"
-                        : "Add to Cart"}
+                    {adding ? "Adding..." : added ? "Added ✓" : "Add to Cart"}
                 </button>
 
-                {message && (
-                    <p className="login-message">
-                        {message}
-                    </p>
-                )}
+                {/* Fixed message area */}
+                <div className="product-message-slot">
+                    {message && (
+                        <p className={added ? "success-message" : "login-message"}>
+                            {message}
+                        </p>
+                    )}
+                </div>
 
             </div>
         </div>

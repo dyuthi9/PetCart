@@ -1,12 +1,12 @@
-
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
 import "../pages/Auth.css";
 
 function Cart() {
     const { user } = useAuth();
+    const navigate = useNavigate();
 
     const {
         items,
@@ -40,18 +40,27 @@ function Cart() {
         });
     };
 
+    // Guests can fill the cart, but must log in to check out
+    const handleStartCheckout = () => {
+        if (!user) {
+            navigate("/login");
+            return;
+        }
+        setShowCheckout(true);
+    };
+
     const handlePlaceOrder = async (e) => {
         e.preventDefault();
         setOrdering(true);
         setError("");
 
         try {
-            const orderData = {
-    address,
-    paymentMethod,
-};
+            const result = await placeOrder({ address, paymentMethod });
 
-const result = await placeOrder(orderData);
+            if (result.needsLogin) {
+                navigate("/login");
+                return;
+            }
 
             if (result.ok) {
                 alert("Order placed successfully! 🐾");
@@ -59,7 +68,6 @@ const result = await placeOrder(orderData);
             } else {
                 setError(result.message || "Unable to place order.");
             }
-
         } catch (err) {
             console.error("Place order error:", err);
             setError("Something went wrong. Please try again.");
@@ -68,23 +76,9 @@ const result = await placeOrder(orderData);
         }
     };
 
-    if (!user) {
-        return (
-            <main className="cart-page">
-                <div className="cart-container">
-                    <h2 className="cart-title">Your Cart 🛒</h2>
-                    <p className="cart-message">
-                        Please <Link to="/login">log in</Link> to see your cart.
-                    </p>
-                </div>
-            </main>
-        );
-    }
-
     return (
         <main className="home1 cart-page">
             <div className="cart-container">
-
                 <h2 className="cart-title">Your Cart 🛒</h2>
 
                 {loading && <p>Loading...</p>}
@@ -98,7 +92,6 @@ const result = await placeOrder(orderData);
 
                 {items.map(({ product, quantity }) => (
                     <div className="cart-item" key={product._id}>
-
                         <div className="cart-item-info">
                             {product.image && (
                                 <img
@@ -109,10 +102,7 @@ const result = await placeOrder(orderData);
                             )}
 
                             <div>
-                                <h4 className="cart-item-name">
-                                    {product.name}
-                                </h4>
-
+                                <h4 className="cart-item-name">{product.name}</h4>
                                 <span className="cart-item-price">
                                     ₹{Number(product.price).toLocaleString("en-IN")}
                                 </span>
@@ -120,12 +110,9 @@ const result = await placeOrder(orderData);
                         </div>
 
                         <div className="cart-item-actions">
-
                             <div className="cart-qty">
                                 <button
-                                    onClick={() =>
-                                        updateQuantity(product._id, quantity - 1)
-                                    }
+                                    onClick={() => updateQuantity(product._id, quantity - 1)}
                                 >
                                     −
                                 </button>
@@ -133,9 +120,7 @@ const result = await placeOrder(orderData);
                                 <span>{quantity}</span>
 
                                 <button
-                                    onClick={() =>
-                                        updateQuantity(product._id, quantity + 1)
-                                    }
+                                    onClick={() => updateQuantity(product._id, quantity + 1)}
                                 >
                                     +
                                 </button>
@@ -153,45 +138,39 @@ const result = await placeOrder(orderData);
 
                 {items.length > 0 && (
                     <div className="cart-summary">
-
                         <div className="cart-total">
                             <span>Total</span>
-                            <span>
-                                ₹{cartTotal.toLocaleString("en-IN")}
-                            </span>
+                            <span>₹{cartTotal.toLocaleString("en-IN")}</span>
                         </div>
 
+                        {!user && (
+                            <p className="cart-message">
+                                Your cart is saved on this device.{" "}
+                                <Link to="/login">Log in</Link> to place your order.
+                            </p>
+                        )}
+
                         <div className="cart-buttons">
-                            <button
-                                className="cart-clear"
-                                onClick={clearCart}
-                            >
+                            <button className="cart-clear" onClick={clearCart}>
                                 Clear cart
                             </button>
 
-                            <button
-                                className="cart-order"
-                                onClick={() => setShowCheckout(true)}
-                            >
-                                Place Order
+                            <button className="cart-order" onClick={handleStartCheckout}>
+                                {user ? "Place Order" : "Login to Order"}
                             </button>
                         </div>
                     </div>
                 )}
 
-                {/* CHECKOUT FORM */}
-
-                {showCheckout && items.length > 0 && (
+                {/* CHECKOUT FORM (logged-in users only) */}
+                {user && showCheckout && items.length > 0 && (
                     <div className="checkout-container">
-
                         <h2>Checkout 🐾</h2>
 
                         <form onSubmit={handlePlaceOrder}>
-
                             <h3>Delivery Address</h3>
 
                             <div className="checkout-grid">
-
                                 <input
                                     type="text"
                                     name="fullName"
@@ -249,22 +228,18 @@ const result = await placeOrder(orderData);
                                     title="Enter a valid 6-digit PIN code"
                                     required
                                 />
-
                             </div>
 
                             <h3>Payment Details</h3>
 
                             <div className="payment-options">
-
                                 <label>
                                     <input
                                         type="radio"
                                         name="payment"
                                         value="COD"
                                         checked={paymentMethod === "COD"}
-                                        onChange={(e) =>
-                                            setPaymentMethod(e.target.value)
-                                        }
+                                        onChange={(e) => setPaymentMethod(e.target.value)}
                                     />
                                     Cash on Delivery
                                 </label>
@@ -275,9 +250,7 @@ const result = await placeOrder(orderData);
                                         name="payment"
                                         value="UPI"
                                         checked={paymentMethod === "UPI"}
-                                        onChange={(e) =>
-                                            setPaymentMethod(e.target.value)
-                                        }
+                                        onChange={(e) => setPaymentMethod(e.target.value)}
                                     />
                                     UPI
                                 </label>
@@ -288,30 +261,21 @@ const result = await placeOrder(orderData);
                                         name="payment"
                                         value="CARD"
                                         checked={paymentMethod === "CARD"}
-                                        onChange={(e) =>
-                                            setPaymentMethod(e.target.value)
-                                        }
+                                        onChange={(e) => setPaymentMethod(e.target.value)}
                                     />
                                     Credit / Debit Card
                                 </label>
-
                             </div>
 
                             <div className="checkout-total">
                                 <h3>
-                                    Total Amount: ₹
-                                    {cartTotal.toLocaleString("en-IN")}
+                                    Total Amount: ₹{cartTotal.toLocaleString("en-IN")}
                                 </h3>
                             </div>
 
-                            {error && (
-                                <p className="login-message">
-                                    {error}
-                                </p>
-                            )}
+                            {error && <p className="login-message">{error}</p>}
 
                             <div className="cart-buttons">
-
                                 <button
                                     type="button"
                                     className="cart-clear"
@@ -325,17 +289,12 @@ const result = await placeOrder(orderData);
                                     className="cart-order"
                                     disabled={ordering}
                                 >
-                                    {ordering
-                                        ? "Processing..."
-                                        : "Confirm Order"}
+                                    {ordering ? "Processing..." : "Confirm Order"}
                                 </button>
-
                             </div>
-
                         </form>
                     </div>
                 )}
-
             </div>
         </main>
     );

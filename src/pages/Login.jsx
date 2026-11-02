@@ -345,7 +345,7 @@ const handleDeleteOrder = async (orderId) => {
 
   // Login form shown to visitors.
   return (
-    <main className=" auth-page">
+    <main className="home1 auth-page">
       <section className="auth-container">
         <div className="auth-banner">
           <span className="auth-pet-icon" aria-hidden="true">

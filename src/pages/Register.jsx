@@ -73,7 +73,7 @@ function Register() {
   };
 
   return (
-    <main className="auth-page">
+    <main className="home1 auth-page">
       <section className="auth-container">
         <div className="auth-banner">
           <span className="auth-pet-icon">🐶 🐱</span>

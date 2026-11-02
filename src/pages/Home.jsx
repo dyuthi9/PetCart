@@ -3,7 +3,7 @@ import "./Home.css";
 import "../App.css";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import ProductCard from "./ProductCard";
+import ProductCard from "../components/ProductCard";
 
 import {
   FaBone,
@@ -149,56 +149,121 @@ function Home({ onAddToCart }) {
 
       
 
-       {/* ---------- ABOUT ---------- */}
-      <section className="home1 about-section" id="about">
-        
-        <h1 className="text-center mb-4">About PetCart</h1>
+     {/* ---------- ABOUT ---------- */}
+<section className="home1 about-section" id="about">
 
-        <div className="about-content">
-          <p className="about-intro">
-            PetCart is a one-stop shop for everything your furry, feathered and
-            scaly family members need. We believe every pet deserves good food,
-            safe toys and a comfy place to rest.
-          </p>
+  <div className="about-heading">
+    <span>🐾 ABOUT PETCART</span>
+    <h1>Making Pet Shopping Simple & Convenient</h1>
+    <p>
+      Everything your beloved pets need, all in one place.
+    </p>
+  </div>
 
-          <div className="about-cards">
-            <div className="about-card">
-              <span className="about-icon">🐾</span>
-              <h3>Quality Products</h3>
-              <p>Carefully picked food, toys and care essentials for every pet.</p>
-            </div>
+  <div className="about-content">
 
-            <div className="about-card">
-              <span className="about-icon">🚚</span>
-              <h3>Fast Delivery</h3>
-              <p>Your order is packed with care and delivered to your door.</p>
-            </div>
+    <p className="about-intro">
+      PetCart is an online pet store that brings together a wide
+      range of products for your beloved pets. From nutritious food
+      and exciting toys to comfortable furniture and everyday care
+      essentials, we make it easy to find everything your pets need.
+      Our platform provides a convenient shopping experience with
+      user registration, secure login, cart management and order
+      management.
+    </p>
 
-            <div className="about-card">
-              <span className="about-icon">💛</span>
-              <h3>Made with Love</h3>
-              <p>We are pet parents too, so we only sell what we would use.</p>
-            </div>
-          </div>
+    <div className="about-cards">
+
+      <div className="about-card">
+        <span className="about-icon">🛍️</span>
+        <h3>Wide Product Collection</h3>
+        <p>
+          Browse different categories of pet food, toys,
+          accessories, furniture and care essentials.
+        </p>
+      </div>
+
+      <div className="about-card">
+        <span className="about-icon">🔐</span>
+        <h3>Easy & Secure Shopping</h3>
+        <p>
+          Register, log in, manage your shopping cart
+          and conveniently place your orders.
+        </p>
+      </div>
+
+      <div className="about-card">
+        <span className="about-icon">💚</span>
+        <h3>Convenient Pet Care</h3>
+        <p>
+          Find essential products for your pets and
+          make their everyday shopping easier.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{/* ---------- CONTACT ---------- */}
+<section className="home1 contact-section" id="contact">
+
+  <div className="contact-heading">
+    <span>📞 CONTACT PETCART</span>
+    <h1>Let's Connect With You!</h1>
+    <p>
+      We're always happy to help you with your shopping experience.
+    </p>
+  </div>
+
+  <div className="contact-container">
+
+    <div className="contact-info">
+
+      <div className="contact-item">
+        <span>📍</span>
+        <div>
+          <h3>Our Location</h3>
+          <p>Vijayawada, Andhra Pradesh, India</p>
         </div>
-      </section>
+      </div>
 
-      {/* ---------- CONTACT ---------- */}
-      <section className="home1 contact-section" id="contact">
-        <h1 className="text-center mb-4">Contact Us</h1>
-
-        <div className="contact-container">
-          <div className="contact-info">
-            <h3>Get in touch</h3>
-            <p>Questions about an order or a product? We are happy to help.</p>
-            <p>📍 Vijayawada, Andhra Pradesh, India</p>
-            <p>📞 +91 00000 00000</p>
-            <p>✉️ support@petcart.example</p>
-          </div>
-
-          
+      <div className="contact-item">
+        <span>📧</span>
+        <div>
+          <h3>Email Support</h3>
+          <p>Contact our support team for product and order-related queries.</p>
         </div>
-      </section>
+      </div>
+
+      <div className="contact-item">
+        <span>🛒</span>
+        <div>
+          <h3>Shopping Assistance</h3>
+          <p>Need help choosing products? Explore our pet product collections.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div className="contact-message">
+      <span>🐶 🐱 🐾</span>
+      <h2>We're Here for Every Paw!</h2>
+      <p>
+        Thank you for choosing PetCart.
+        Making pet shopping easier is what we love to do.
+      </p>
+
+      <button
+        className="contact-shop-btn"
+        onClick={() => navigate("/categories")}
+      >
+        Explore Categories →
+      </button>
+    </div>
+
+  </div>
+</section>
     </>
   );
 }
